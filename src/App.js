@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import data from "./data";
 import useLoaderWithFrame from "./Loader/useLoaderWithFrame";
 import useLoaderWithTimeout from "./Loader/useLoaderWithTimeout";
+import UseScrollToLoad from "./Loader/UseScrollToLoad/view1";
+
+const Container = styled.div``;
 
 const Card = styled.div`
   width: 250px;
@@ -13,16 +16,13 @@ const Card = styled.div`
 const Button = styled.button``;
 
 function App() {
-  // const dataToShow = useLoaderWithTimeout(data);
-  const dataToShow = useLoaderWithFrame(data);
-
+  const containerRef = useRef();
   const [visible, setVisible] = useState(false);
 
   return (
-    <div>
-      <Button onClick={() => setVisible(!visible)}>显示</Button>
-      {visible && dataToShow.map(({ id }) => <Card key={id}>{id}</Card>)}
-    </div>
+    <Container>
+      <UseScrollToLoad />
+    </Container>
   );
 }
 
