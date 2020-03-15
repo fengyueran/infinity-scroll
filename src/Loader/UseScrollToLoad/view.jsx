@@ -8,18 +8,21 @@ const Container = styled.div`
   height: 100vh;
   position: relative;
   overflow-y: overlay;
+
+  /* transform: ${props => `translateY(${props.transform}px)`}; */
 `;
 
 const List = styled.div`
   overflow: hidden;
   background: darkgrey;
   position: relative;
+  padding-top: ${props => `${props.padding}px`};
 `;
 
 const CARD_HEIGHT = 200;
 const Card = styled.div`
   width: 250px;
-  height: 200px;
+  height: 198px;
   border: 1px solid;
   background: antiquewhite;
 `;
@@ -34,17 +37,24 @@ const Placeholder = styled.div`
 function View() {
   const containerRef = useRef();
   const placeHolderheight = CARD_HEIGHT;
-  const dataToShow = useScrollToLoad(containerRef, data);
+  const startIndex = useScrollToLoad(containerRef, data);
+  const countInScreen = 10;
+  const dataToShow = data.slice(startIndex, startIndex + countInScreen);
+  const padding = startIndex * 200;
   const [visible, setVisible] = useState(false);
+  const transform = containerRef.current
+    ? containerRef.current.scrollTop -
+      (containerRef.current.scrollTop % CARD_HEIGHT)
+    : 0;
 
   return (
-    <Container>
-      <List ref={containerRef}>
+    <Container ref={containerRef}>
+      <List style={{ height: 200 * 10000 - padding }} padding={padding}>
         {dataToShow.map(({ id }) => (
           <Card key={id}>{id}</Card>
         ))}
       </List>
-      <Placeholder height={placeHolderheight} />
+      {/* <Placeholder height={placeHolderheight} /> */}
     </Container>
   );
 }
