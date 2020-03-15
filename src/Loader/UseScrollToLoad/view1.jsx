@@ -14,7 +14,7 @@ class Item extends Component {
 
     return (
       <div
-        style={{ height: "60px", border: "1px solid" }}
+        style={{ height: "58px", border: "1px solid" }}
         ref={node => {
           this.node = node;
         }}
@@ -71,7 +71,8 @@ class VirtualizedList extends Component {
 
   cachePosition(node, index) {
     const rect = node.getBoundingClientRect();
-    const top = rect.top + window.pageYOffset;
+    let top = rect.top + window.pageYOffset;
+    top = (index + 1) * height;
     console.log("index", index);
     console.log("bottom", top + height);
     this.cache.push({
@@ -86,13 +87,13 @@ class VirtualizedList extends Component {
   handleScroll(e) {
     const scrollTop = this.wrapper.scrollTop;
     if (scrollTop > this.scrollTop) {
-      console.log("111111", scrollTop);
+      console.log("1111111111111下", scrollTop);
       if (scrollTop > this.anchorItem.bottom) {
         this.updateBoundaryIndex(scrollTop);
         this.updateVisibleData();
       }
     } else if (scrollTop < this.scrollTop) {
-      console.log("2222");
+      console.log("22222222222222上", scrollTop);
       if (scrollTop < this.anchorItem.top) {
         this.updateBoundaryIndex(scrollTop);
         this.updateVisibleData();
@@ -152,6 +153,7 @@ class VirtualizedList extends Component {
         }}
       >
         <div
+          id="aa"
           style={{
             paddingTop: `${startOffset}px`,
             paddingBottom: `${endOffset}px`
