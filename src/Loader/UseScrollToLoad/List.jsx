@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import data from "../../data";
-import useScrollToLoad from "./useScrollToLoad";
+import useScrollToLoad from "./useScrollFlexContainer";
 
 const Container = styled.div`
   width: 100vw;
@@ -12,10 +12,13 @@ const Container = styled.div`
   /* transform: ${props => `translateY(${props.transform}px)`}; */
 `;
 
-const List = styled.div`
+const ListWrapper = styled.div`
   overflow: hidden;
   background: darkgrey;
   position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
   padding-top: ${props => `${props.padding}px`};
 `;
 
@@ -24,6 +27,7 @@ const Card = styled.div`
   width: 250px;
   height: 198px;
   border: 1px solid;
+  flex-shrink: 0;
   background: antiquewhite;
 `;
 
@@ -34,29 +38,32 @@ const Placeholder = styled.div`
   height: ${props => `${props.height}px`};
 `;
 
-function View() {
+function List() {
   const containerRef = useRef();
-  const placeHolderheight = CARD_HEIGHT;
-  const startIndex = useScrollToLoad(containerRef, data);
-  const countInScreen = 10;
-  const dataToShow = data.slice(startIndex, startIndex + countInScreen);
-  const padding = startIndex * 200;
-  const [visible, setVisible] = useState(false);
-  const transform = containerRef.current
-    ? containerRef.current.scrollTop -
-      (containerRef.current.scrollTop % CARD_HEIGHT)
-    : 0;
+  const cellWidth = 250;
+  const cellHeight = 200;
+
+  const { dataToShow, padding, totalRowCount } = useScrollToLoad(
+    containerRef,
+    data,
+    {
+      cellWidth,
+      cellHeight
+    }
+  );
 
   return (
     <Container ref={containerRef}>
-      <List style={{ height: 200 * 10000 - padding }} padding={padding}>
+      <ListWrapper
+        style={{ height: cellHeight * totalRowCount - padding }}
+        padding={padding}
+      >
         {dataToShow.map(({ id }) => (
           <Card key={id}>{id}</Card>
         ))}
-      </List>
-      {/* <Placeholder height={placeHolderheight} /> */}
+      </ListWrapper>
     </Container>
   );
 }
 
-export default View;
+export default List;
