@@ -14,12 +14,12 @@ const Container = styled.div`
 
 const ListWrapper = styled.div`
   overflow: hidden;
-  background: darkgrey;
+  background: red;
   position: relative;
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
-  padding-top: ${props => `${props.padding}px`};
+  /* padding-top: ${props => `${props.padding}px`}; */
 `;
 
 const CARD_HEIGHT = 200;
@@ -55,8 +55,11 @@ function List() {
   return (
     <Container ref={containerRef}>
       <ListWrapper
-        style={{ height: cellHeight * totalRowCount - padding }}
-        padding={padding}
+        style={{
+          height: cellHeight * totalRowCount - padding,
+          transform: `translateY(${padding}px)`
+        }}
+        // padding={padding}
       >
         {dataToShow.map(({ id }) => (
           <Card key={id}>{id}</Card>
